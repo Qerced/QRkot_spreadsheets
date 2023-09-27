@@ -1,56 +1,60 @@
-# Благотворительный фонд поддержки котов
+# Бронирование переговорок
 
-Фонд собирает пожертвования на различные целевые проекты: на медицинское обслуживание нуждающихся хвостатых, на обустройство кошачьей колонии в подвале, на корм оставшимся без попечения кошкам — на любые цели, связанные с поддержкой кошачьей популяции.
+Проект, позволяющий управлять комнатами и их бронированием.
 
 ## Технологический стек
 
 * FastAPI
 * FastApiUsers
 * Pydantic
+* Aiogoogle
 * SQLAlchemy
 * Alembic
-* Uvicorn
 * SQLite
+* Uvicorn
 
 ## Установка
 
 Чтобы установить проект, выполните следующие команды:
 
 ```
-git clone https://github.com/Qerced/cat_charity_fund.git
-cd cat_charity_fund
+git clone git@github.com:Qerced/room_reservation.git
+cd room_reservation
 pip install -r requirements.txt
 ```
 
 ## Запуск
 
-Перед запуском примените необходимые миграции из `alembic/versions/`:
-
-```
-alembic upgrade head
-```
-
-Для заполнения env руководствуйтесь следующим примером:
-
-```
-APP_TITLE=Благотворительный фонд поддержки котиков  # Optional
-DATABASE_URL=sqlite+aiosqlite:///./fastapi.db
-SECRET=yoursecret
-```
-
-Запуск проекта осуществляется командой:
+Чтобы запустить проект, выполните следующую команду:
 
 ```
 uvicorn app.main:app --reload
 ```
 
+Для заполнения env, руководствуйтесь следующим примером:
+
+```
+APP_TITLE=Сервис бронирования переговорных комнат
+DATABASE_URL=sqlite+aiosqlite:///./fastapi.db
+SECRET=yoursecret
+FIRST_SUPERUSER_EMAIL=user@example.com
+FIRST_SUPERUSER_PASSWORD=string
+TYPE=service_account
+PROJECT_ID=...
+PRIVATE_KEY_ID=...
+PRIVATE_KEY=...
+CLIENT_EMAIL=...
+CLIENT_ID=...
+AUTH_URI=https://accounts.google.com/o/oauth2/auth
+TOKEN_URI=https://oauth2.googleapis.com/token
+AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
+CLIENT_X509_CERT_URL=...
+EMAIL_USER=creator_service@example.com
+```
+
 ## Использование
-В Фонде может быть открыто несколько целевых проектов. Целевые проекты создаются администраторами сайта. Каждый пользователь может сделать пожертвование и сопроводить его комментарием. Пожертвования в проекты поступают по принципу First In, First Out. Сразу после создания нового проекта или пожертвования запускается процесс «инвестирования».
 
-
-## API
-
-Чтобы узнать больше о методах реализованных в проекте перейдите по адресу: `127.0.0.1:8000/docs`
+Для использования проекта ознакомьтесь с документацией, перейдя по адресу: `127.0.0.1:8000/docs`
 
 ## Авторы:
 - [Vakauskas Vitas](https://github.com/Qerced)
