@@ -3,7 +3,7 @@ from typing import Optional
 from pydantic import BaseSettings
 
 APP_TITLE_DEFAULT = 'QRKot'
-QRKOT_URL_DEFAULT = 'sqlite+aiosqlite:///./fastapi.db'
+QRKOT_URL_DEFAULT = 'sqlite+aiosqlite:///./charity.db'
 SECRET_DEFAULT = 'SECRET'
 ENV_FILE = '.env'
 
