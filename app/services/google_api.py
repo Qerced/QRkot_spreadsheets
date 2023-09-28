@@ -92,18 +92,18 @@ async def spreadsheets_update_value(
          project.close_date.strftime(FORMAT),
          project.description] for project in charity_projects
     ])
-    if len(table_values) > MAX_ROW or \
-       len(max(table_values, key=len)) > MAX_COLUMN:
+    row_count, column_count = len(table_values), max(map(len, table_values))
+    if row_count > MAX_ROW or column_count > MAX_COLUMN:
         raise ValueError(
             FAILED_UPDATE.format(
-                row_count=len(table_values),
-                column_count=len(max(table_values, key=len))
+                row_count=row_count,
+                column_count=column_count
             )
         )
     await wrapper_services.as_service_account(
         service.spreadsheets.values.update(
             spreadsheetId=spreadsheet_id,
-            range='Лист 1!R1C1:R{r2}C{c2}'.format(r2=MAX_ROW, c2=MAX_COLUMN),
+            range=f'Лист 1!R1C1:R{row_count}C{column_count}',
             valueInputOption='USER_ENTERED',
             json={
                 'majorDimension': 'ROWS',
