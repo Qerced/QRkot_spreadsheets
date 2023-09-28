@@ -11,9 +11,11 @@ FORMAT = '%Y/%m/%d %H:%M:%S'
 MAX_ROW = 5000
 MAX_COLUMN = 2000
 
-FAILED_UPDATE = ('Обновляемые данные выходят за допустимый диапазон в таблице'
-                 f'Доступный объем записи: R1C1:R{MAX_ROW}C{MAX_COLUMN}'
-                 'Текущий диапазон составляет: R1C1:R{row_count}C{column_count}')
+FAILED_UPDATE = (
+    'Обновляемые данные выходят за допустимый диапазон в таблице'
+    f'Доступный объем записи: R1C1:R{MAX_ROW}C{MAX_COLUMN}'
+    'Текущий диапазон составляет: R1C1:R{row_count}C{column_count}'
+)
 
 TABLE_VALUES = [
     ['Отчет от', '{now_date_time}'],
