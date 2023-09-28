@@ -8,10 +8,12 @@ from app.models.charity_project import CharityProject
 
 FORMAT = '%Y/%m/%d %H:%M:%S'
 
-FAILED_UPDATE = 'Обновляемые данные выходят за диапазон допустимый в таблице'
-
 MAX_ROW = 5000
 MAX_COLUMN = 2000
+
+FAILED_UPDATE = ('Обновляемые данные выходят за допустимый диапазон в таблице'
+                 f'Доступный объем записи: R1C1:R{MAX_ROW}C{MAX_COLUMN}'
+                 'Текущий диапазон составляет: R1C1:R{row_count}C{column_count}')
 
 TABLE_VALUES = [
     ['Отчет от', '{now_date_time}'],
@@ -88,15 +90,18 @@ async def spreadsheets_update_value(
          project.close_date.strftime(FORMAT),
          project.description] for project in charity_projects
     ])
-    if (len(table_values) > MAX_ROW or
-            len(max(table_values, key=len)) > MAX_COLUMN):
-        raise ValueError(FAILED_UPDATE)
+    if len(table_values) > MAX_ROW or \
+       len(max(table_values, key=len)) > MAX_COLUMN:
+        raise ValueError(
+            FAILED_UPDATE.format(
+                row_count=len(table_values),
+                column_count=len(max(table_values, key=len))
+            )
+        )
     await wrapper_services.as_service_account(
         service.spreadsheets.values.update(
             spreadsheetId=spreadsheet_id,
-            range='Лист 1!R1C1:R{r2}C{c2}'.format(
-                r2=len(table_values),
-                c2=len(max(table_values, key=len))),
+            range='Лист 1!R1C1:R{r2}C{c2}'.format(r2=MAX_ROW, c2=MAX_COLUMN),
             valueInputOption='USER_ENTERED',
             json={
                 'majorDimension': 'ROWS',

@@ -31,13 +31,6 @@ pip install -r requirements.txt
 alembic upgrade head
 ```
 
-При необходимости повторной установки Alembic или инициализации собственных миграций, используйте шаблон `async` и автогенерацию:
-
-```
-alembic init --template async
-alembic revision --autogenerate -m "Migration name"
-```
-
 Для заполнения env, необходимо получить [JSON-файл](https://cloud.google.com/iam/docs/keys-create-delete) с ключом доступа к сервисному аккаунту. Руководствуйтесь следующим примером для корректной работы всего проекта:
 
 ```
@@ -73,8 +66,8 @@ uvicorn app.main:app --reload
 
 ## API
 
-Чтобы узнать больше о методах реализованных в проекте перейдите на [страницу документации](http://127.0.0.1:8000/docs)
-или загрузите файл [openapi.json](https://github.com/Qerced/QRkot_spreadsheets/blob/main/openapi.json) на сайт [redocly](https://redocly.github.io/redoc/).
+Чтобы узнать больше о методах, реализованных в проекте, перейдите на страницу документации [Swagger](http://127.0.0.1:8000/docs) или [ReDoc](http://127.0.0.1:8000/redoc).
+Если вы еще не успели развернуть у себя проект, то вы можете загрузить файл [openapi.json](https://github.com/Qerced/QRkot_spreadsheets/blob/main/openapi.json) на сайт [Redocly](https://redocly.github.io/redoc/).
 
 ## Авторы:
 - [Vakauskas Vitas](https://github.com/Qerced)
