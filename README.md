@@ -74,7 +74,7 @@ uvicorn app.main:app --reload
 ## API
 
 Чтобы узнать больше о методах реализованных в проекте перейдите на [страницу документации](http://127.0.0.1:8000/docs)
-или загрузите [файл](https://github.com/Qerced/QRkot_spreadsheets/blob/main/openapi.json) на сайт [redocly](https://redocly.github.io/redoc/).
+или загрузите файл [openapi.json](https://github.com/Qerced/QRkot_spreadsheets/blob/main/openapi.json) на сайт [redocly](https://redocly.github.io/redoc/).
 
 ## Авторы:
 - [Vakauskas Vitas](https://github.com/Qerced)
