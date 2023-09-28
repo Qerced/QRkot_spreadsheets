@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 from datetime import datetime
 
 from aiogoogle import Aiogoogle
@@ -8,11 +8,17 @@ from app.models.charity_project import CharityProject
 
 FORMAT = '%Y/%m/%d %H:%M:%S'
 
+FAILED_UPDATE = 'Обновляемые данные выходят за диапазон допустимый в таблице'
+
+MAX_ROW = 5000
+MAX_COLUMN = 2000
+
 TABLE_VALUES = [
     ['Отчет от', '{now_date_time}'],
     ['Топ проектов по скорости закрытия'],
     ['Название проекта', 'Время сбора', 'Описание']
 ]
+
 SPREADSHEET_BODY = dict(
     properties=dict(
         title='Отчет на {now_date_time}',
@@ -23,8 +29,8 @@ SPREADSHEET_BODY = dict(
         sheetId=0,
         title='Лист 1',
         gridProperties=dict(
-            rowCount=len(TABLE_VALUES),
-            columnCount=len(max(TABLE_VALUES, key=len))
+            rowCount=MAX_ROW,
+            columnCount=MAX_COLUMN
         )
     ))]
 )
@@ -32,8 +38,11 @@ SPREADSHEET_BODY = dict(
 
 async def spreadsheets_create(
         wrapper_services: Aiogoogle,
-        spreadsheet_body=copy.deepcopy(SPREADSHEET_BODY)
+        spreadsheet_body=None
 ) -> tuple[str, str]:
+    spreadsheet_body = (
+        spreadsheet_body if spreadsheet_body else deepcopy(SPREADSHEET_BODY)
+    )
     spreadsheet_body['properties']['title'] = (
         spreadsheet_body['properties']['title'].format(
             now_date_time=datetime.now().strftime(FORMAT)
@@ -69,9 +78,9 @@ async def set_user_permission(
 async def spreadsheets_update_value(
         spreadsheet_id: str,
         charity_projects: list[CharityProject],
-        wrapper_services: Aiogoogle,
-        table_values=copy.deepcopy(TABLE_VALUES)
+        wrapper_services: Aiogoogle
 ) -> None:
+    table_values = deepcopy(TABLE_VALUES)
     table_values[0][1] = datetime.now().strftime(FORMAT)
     service = await wrapper_services.discover('sheets', 'v4')
     table_values.extend([
@@ -79,6 +88,9 @@ async def spreadsheets_update_value(
          project.close_date.strftime(FORMAT),
          project.description] for project in charity_projects
     ])
+    if (len(table_values) > MAX_ROW or
+            len(max(table_values, key=len)) > MAX_COLUMN):
+        raise ValueError(FAILED_UPDATE)
     await wrapper_services.as_service_account(
         service.spreadsheets.values.update(
             spreadsheetId=spreadsheet_id,
